@@ -1,0 +1,83 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 40px;
+  line-height: 1.6;
+}
+
+h1 {
+  text-align: center;
+}
+
+h2 {
+  font-size: 30px;
+  text-align: center;
+}
+
+p {
+  text-align: center;
+}
+
+figure {
+  display: inline-block;
+  text-align: center;
+  margin: 20px 0;
+}
+
+figcaption {
+  font-style: italic;
+  font-size: 0.9em;
+  margin-top: 5px;
+}
+
+.image-row {
+  display: flex;
+  justify-content: center; /* centers all figures */
+  gap: 10px; /* space between images */
+}
+
+.image-row figure {
+  display: inline-block;
+  flex-direction: column; /* stack image and caption vertically */
+  align-items: center;    /* keep caption centered under image */
+  margin: 0;
+}
+
+.image-row img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.image-row figcaption {
+  max-width: 100%;
+  margin-top: 8px;
+  text-align: center;
+}
+
+.image-row p {
+  margin-top: 8px;
+  text-align: center;
+}
+
+.image-col {
+  display: flex;
+  flex-direction: column; /* stack images vertically */
+  gap: 5px; /* space between stacked images */
+  align-items: center; /* center images horizontally within the column */
+}
+
+.big_images figure {
+  max-width: 70vw;
+}
+
+.left_image img {
+  margin-left: auto;
+}
+
+.right_image img {
+  margin-right: auto;
+}
+
+.acknowledge {
+  font-size: 12px;
+}
