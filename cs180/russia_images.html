@@ -31,7 +31,7 @@
   <div class="image-row">
     <div class="image-col">
       <figure>
-        <img src="media/proj1/image_features/church/church_feat_combined.jpg" alt="Church Combined Features">
+        <img src="media/proj1/image_features/optimized/church_feat_combined_opt.jpg" alt="Church Combined Features" loading="lazy" class="feature-image">
         <figcaption>Combined Church Features</figcaption>
       </figure>
     </div>
@@ -46,19 +46,19 @@
     <div class="image-row">
       <div class="image-col">
         <figure>
-          <img src="media/proj1/image_features/church/church_feat_r.jpg" alt="Church Red Features">
+          <img src="media/proj1/image_features/optimized/church_feat_r_opt.jpg" alt="Church Red Features" loading="lazy" class="feature-image">
           <figcaption>Red Channel Features</figcaption>
         </figure>
       </div>
       <div class="image-col">
         <figure>
-          <img src="media/proj1/image_features/church/church_feat_g.jpg" alt="Church Green Features">
+          <img src="media/proj1/image_features/optimized/church_feat_g_opt.jpg" alt="Church Green Features" loading="lazy" class="feature-image">
           <figcaption>Green Channel Features</figcaption>
         </figure>
       </div>
       <div class="image-col">
         <figure>
-          <img src="media/proj1/image_features/church/church_feat_b.jpg" alt="Church Blue Features">
+          <img src="media/proj1/image_features/optimized/church_feat_b_opt.jpg" alt="Church Blue Features" loading="lazy" class="feature-image">
           <figcaption>Blue Channel Features</figcaption>
         </figure>
       </div>
@@ -67,13 +67,13 @@
     <div class="image-row">
       <div class="image-col">
         <figure>
-          <img src="media/proj1/color_adjusted/icon.jpg" alt="Icon Features">
+          <img src="media/proj1/color_adjusted/icon.jpg" alt="Icon Features" loading="lazy" class="feature-image">
           <figcaption>Icon Image</figcaption>
         </figure>
       </div>
       <div class="image-col">
         <figure>
-          <img src="media/proj1/image_features/icon_feats.jpg" alt="Icon Features">
+          <img src="media/proj1/image_features/icon_feats.jpg" alt="Icon Features" loading="lazy" class="feature-image">
           <figcaption>Icon Features</figcaption>
         </figure>
       </div>
@@ -343,5 +343,23 @@
     <p class="acknowledge">The train, forest, bridge, and greenhouse are all additional images I chose to show.</p>
     <p class="acknowledge">I used ChatGPT while building this website.</p>
   </div>
+
+  <script>
+    // Handle feature image loading states
+    document.addEventListener('DOMContentLoaded', function() {
+      const featureImages = document.querySelectorAll('.feature-image');
+      
+      featureImages.forEach(img => {
+        img.addEventListener('load', function() {
+          this.classList.add('loaded');
+        });
+        
+        // If image is already loaded (cached), add loaded class immediately
+        if (img.complete && img.naturalHeight !== 0) {
+          img.classList.add('loaded');
+        }
+      });
+    });
+  </script>
 </body>
 </html>

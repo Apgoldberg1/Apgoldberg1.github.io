@@ -74,6 +74,45 @@ figcaption {
   height: auto;
 }
 
+/* Feature image loading states */
+.feature-image {
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  background-color: #f0f0f0;
+  min-height: 200px;
+  position: relative;
+}
+
+.feature-image.loaded {
+  opacity: 1;
+}
+
+.feature-image:not(.loaded) {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+.feature-image:not(.loaded)::after {
+  content: "Loading...";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #666;
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
 .image-row figcaption {
   max-width: 100%;
   margin-top: 8px;
