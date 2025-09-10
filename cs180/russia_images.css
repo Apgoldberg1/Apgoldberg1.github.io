@@ -1,0 +1,210 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 40px;
+  line-height: 1.6;
+}
+
+/* Content container to constrain width on wide screens */
+.content-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Full-width section for images that should span wider than text but not full screen */
+.full-width-section {
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  padding: 20px 0;
+  background-color: #f9f9f9;
+}
+
+.full-width-section .image-row {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 60px;
+}
+
+.full-width-section figcaption {
+  text-align: center;
+  margin-top: 15px;
+}
+
+h1 {
+  text-align: center;
+}
+
+h2 {
+  font-size: 30px;
+  text-align: center;
+}
+
+.center_p {
+  text-align: center;
+}
+
+figure {
+  display: inline-block;
+  text-align: center;
+  margin: 20px 0;
+}
+
+figcaption {
+  font-style: italic;
+  font-size: 0.9em;
+  margin-top: 5px;
+}
+
+.image-row {
+  display: flex;
+  justify-content: center; /* centers all figures */
+  gap: 10px; /* space between images */
+}
+
+.image-row figure {
+  display: inline-block;
+  flex-direction: column; /* stack image and caption vertically */
+  align-items: center;    /* keep caption centered under image */
+  margin: 0;
+}
+
+.image-row img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.image-row figcaption {
+  max-width: 100%;
+  margin-top: 8px;
+  text-align: center;
+}
+
+.image-row p {
+  margin-top: 8px;
+  text-align: center;
+}
+
+.image-col {
+  display: flex;
+  flex-direction: column; /* stack images vertically */
+  gap: 5px; /* space between stacked images */
+  align-items: center; /* center images horizontally within the column */
+}
+
+.big_images figure {
+  max-width: 70vw;
+}
+
+.left_image img {
+  margin-left: auto;
+}
+
+.right_image img {
+  margin-right: auto;
+}
+
+.acknowledge {
+  text-align: center;
+  font-size: 12px;
+}
+
+/* Color Correction Grid Styles */
+.color-correction-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+  gap: 30px;
+  margin: 30px 0;
+  justify-items: center;
+}
+
+/* Column headers styling - always visible */
+.column-headers {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 10px;
+  padding: 10px 0;
+  border-bottom: 2px solid #ddd;
+}
+
+.header-cell {
+  padding: 10px;
+}
+
+/* Always hide individual figcaptions */
+.image-pair figcaption {
+  display: none;
+}
+
+.image-pair {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  max-width: 100%;
+}
+
+.image-pair .image-figures {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.image-pair figure {
+  flex: 1;
+  margin: 0;
+  text-align: center;
+}
+
+.image-pair img {
+  max-width: 100%;
+  height: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.image-pair figcaption {
+  margin-top: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+}
+
+.image-metadata {
+  text-align: center;
+  font-size: 11px;
+  color: #666;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  font-family: monospace;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+  .color-correction-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .image-pair {
+    flex-direction: column; /* Stack metadata below images */
+    gap: 10px;
+  }
+  
+  .image-pair .image-figures {
+    flex-direction: row; /* Keep images side by side */
+    gap: 10px;
+  }
+  
+  .image-pair figure {
+    flex: 1; /* Ensure both images take equal space */
+  }
+}
