@@ -35,41 +35,122 @@
     <h2>Simple Approach</h2>
     <div class="image-row">
       <div class="image-col">
-        <figcaption>cathedral</figcaption>
         <figure>
+          <figcaption>cathedral<br>rb: [-12, -3] rg: [-7, -1]</figcaption>
           <img src="media/proj1/single_scale/cathedral.jpg" alt="" loading="lazy" class="feature-image">
         </figure>
       </div>
       <div class="image-col">
-        <figcaption>monastery</figcaption>
         <figure>
+          <figcaption>monastery<br>rb: [-3, -2] rg: [-6, -1]</figcaption>
           <img src="media/proj1/single_scale/monastery.jpg" alt="" loading="lazy" class="feature-image">
         </figure>
       </div>
       <div class="image-col">
-        <figcaption>tobolsk</figcaption>
         <figure>
+          <figcaption>tobolsk<br>rb: [-6, -3] rg: [-4, -1]</figcaption>
           <img src="media/proj1/single_scale/tobolsk.jpg" alt="Tobolsk" loading="lazy" class="feature-image">
         </figure>
       </div>
     </div>
-    <figcaption style="text-align: center;">Single scale alignment results obtained by exhaustively searching over a 15 by 15 pixel window and finding the offsets with the lowest NCC.</figcaption>
+    <figcaption style="text-align: center;">Single scale alignment results obtained by exhaustively searching over a 30 by 30 pixel window and finding the offsets with the highest NCC.</figcaption>
 
     <p>
-      A simple approach to this image alignment problem is to exhaustively search within a fixed window comparing the image channel values directly using normalized cross corellation (NCC) which is equivalent to a normalized dot product. In other words, we iteratively shift our image one pixel at a time and find the shift with the smallest NCC indicating the image channels are most aligned at that position. This approach works on the three smaller images above, but as the size of the image increases the search window size must also increase which quickly becomes computationally large.
+      A simple approach to this image alignment problem is to exhaustively search within a fixed window comparing the image channel values directly using normalized cross corellation (NCC) which is equivalent to a normalized dot product. In other words, we shift our image one pixel at a time and find the alignment with the smallest NCC indicating the image channels are most aligned at that position. This approach works on the three smaller images above, but as the size of the image increases the search window size must also increase which quickly becomes computationally large.
     </p>
 
-    <h2>Sobel Edge Detection and Multi-Scale Channel Alignment</h2>
+    <h2>Multi-Scale Channel Alignment</h2>
     <p>
-      Aligning the color channels directly is difficult because their intensities are scaled differently and change differently across the image. Because of this, I chose to use edges as my alignment features because they are generally more consistent across image channels.
-    </p>
-    <p>
-      I perfom vertical and horizontal edge detection using <a href="https://en.wikipedia.org/wiki/Sobel_operator">Sobel edge detection</a> then combined the two channels by taking the L2 norm of the vertical and horizontal values on each pixel. This makes all of the values positive, in one channel, and at the same reoslution as the original image (by padding the convolution). I implemented my own conv2d operator using np.lib.stride_tricks.sliding_window_view. I convert my edge feature map to a boolean mask by keeping only edges greater than the 90th percentile edge. I found that this didn't have a significant impact on the output of my algorithm, but working with a boolean mask made other operations, particularly np.roll, faster (~2x overall runtime) than working with floats since the array is shifted so many times.
+      To combat the computational cost of using the single-scale method on large images, I used a multi-scale method which works to accurately align large images. To align align the images I start by shrinking them by the largest power of 2 such that they're still larger than 256x256. Then, I iterate over a 40 by 40 search window centered at the origin, shifting the blue and green features then checking their alignment with the red channel's features. I compare alignments by taking the normalized dot product (NCC) and taking the shift which yields the highest value.
+      Then, I move up to double the resolution and repeat the process with the search window centered based on the previous iterations offset (adjusted to the new scale). I crop the images to be at most 700 by 700 and always crop at least 5% on each side to avoid issues with image borders contributing to the similarity.
     </p>
 
+    <div class="image-row">
+      <div class="image-col">
+        <figure>
+          <img src="media/proj1/multi_scale_rgb/church.jpg" alt="Church - Multi-scale RGB" loading="lazy" class="feature-image">
+          <figcaption>church<br>rb: [-58, 4] rg: [-33, 8]</figcaption>
+        </figure>
+      </div>
+      <div class="image-col">
+        <figure>
+          <img src="media/proj1/multi_scale_rgb/emir.jpg" alt="Emir - Multi-scale RGB" loading="lazy" class="feature-image">
+          <figcaption>emir<br>rb: [-34, -47] rg: [-57, -17]</figcaption>
+        </figure>
+      </div>
+      <div class="image-col">
+        <figure>
+          <img src="media/proj1/multi_scale_rgb/harvesters.jpg" alt="Harvesters - Multi-scale RGB" loading="lazy" class="feature-image">
+          <figcaption>harvesters<br>rb: [-124, -14] rg: [-64, 3]</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <div class="image-row">
+      <div class="image-col">
+        <figure>
+          <img src="media/proj1/multi_scale_rgb/icon.jpg" alt="Icon - Multi-scale RGB" loading="lazy" class="feature-image">
+          <figcaption>icon<br>rb: [-90, -23] rg: [-49, -5]</figcaption>
+        </figure>
+      </div>
+      <div class="image-col">
+        <figure>
+          <img src="media/proj1/multi_scale_rgb/italil.jpg" alt="Italil - Multi-scale RGB" loading="lazy" class="feature-image">
+          <figcaption>italil<br>rb: [-76, -36] rg: [-39, -15]</figcaption>
+        </figure>
+      </div>
+      <div class="image-col">
+        <figure>
+          <img src="media/proj1/multi_scale_rgb/lastochikino.jpg" alt="Lastochikino - Multi-scale RGB" loading="lazy" class="feature-image">
+          <figcaption>lastochikino<br>rb: [-74, 8] rg: [-78, 6]</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <div class="image-row">
+      <div class="image-col">
+        <figure>
+          <img src="media/proj1/multi_scale_rgb/lugano.jpg" alt="Lugano - Multi-scale RGB" loading="lazy" class="feature-image">
+          <figcaption>lugano<br>rb: [-93, 29] rg: [-53, 13]</figcaption>
+        </figure>
+      </div>
+      <div class="image-col">
+        <figure>
+          <img src="media/proj1/multi_scale_rgb/melons.jpg" alt="Melons - Multi-scale RGB" loading="lazy" class="feature-image">
+          <figcaption>melons<br>rb: [-183, -13] rg: [-96, -3]</figcaption>
+        </figure>
+      </div>
+      <div class="image-col">
+        <figure>
+          <img src="media/proj1/multi_scale_rgb/self_portrait.jpg" alt="Self Portrait - Multi-scale RGB" loading="lazy" class="feature-image">
+          <figcaption>self portrait<br>rb: [-179, -37] rg: [-98, -8]</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <div class="image-row">
+      <div class="image-col">
+        <figure>
+          <img src="media/proj1/multi_scale_rgb/siren.jpg" alt="Siren - Multi-scale RGB" loading="lazy" class="feature-image">
+          <figcaption>siren<br>rb: [-97, 23] rg: [-47, 19]</figcaption>
+        </figure>
+      </div>
+      <div class="image-col">
+        <figure>
+          <img src="media/proj1/multi_scale_rgb/three_generations.jpg" alt="Three Generations - Multi-scale RGB" loading="lazy" class="feature-image">
+          <figcaption>three generations<br>rb: [-110, -12] rg: [-59, 4]</figcaption>
+        </figure>
+      </div>
+    </div>
+    <figcaption style="text-align: center;">Multi-scale channel alignment results showing the final aligned images with their corresponding RB and RG offset values.</figcaption>
+
+
+    <h2>Sobel Edge Detection</h2>
     <p>
-      To align align the images I start by shrinking them by the largest power of 2 such that they're still larger than 256x256. Then, I compute the edge detection image features. I iterate over a 40 by 40 search window centered at the origin, shifting the blue and green features then checking their alignment with the red channel's features. I compare alignments by taking the normalized dot product (NCC) and taking the shift which yields the highest value.
-      Then, I move up to double the resolution and repeat the process with the search window centered based on the previous iterations offset (adjusted to the new scale). I crop the images to be at most 700 by 700 and always crop at least 5% on each side to remove the impact of the borders.
+      Aligning the color channels directly is difficult because their intensities are scaled differently and change differently across the image. Paritcularly, the "Emir" image was not succsessfully aligned when I did alignment only based on the individual channels. Because of this, I chose to try edges as my alignment features since they are generally more consistent across image channels.
+    </p>
+    <p>
+      I perfomed vertical and horizontal edge detection using <a href="https://en.wikipedia.org/wiki/Sobel_operator">Sobel edge detection</a> then combined the two channels by taking the L2 norm of the vertical and horizontal values on each pixel. This makes all of the values positive, in one channel, and at the same reoslution as the original image (by padding the convolution). I implemented my own conv2d operator using np.lib.stride_tricks.sliding_window_view. I convert my edge feature map to a boolean mask by keeping only edges greater than the 90th percentile edge. I found that this didn't have a significant impact on the output of my algorithm, but working with a boolean mask made other operations, particularly np.roll, faster (~2x overall runtime) than working with floats since the array is shifted so many times.
     </p>
 
   <div class="image-row">
@@ -123,7 +204,7 @@
       </div>
     </div>
     <figcaption>
-      Here is a visualization of the image features computed on a full aligned image.
+      Visualization of the image features computed on full images after alignment.
     </figcaption>
   </div>
 
@@ -131,7 +212,7 @@
     <h2>Color Correction</h2>
     <p>These photos were taken using red, green, and blue filters and we've assumed that each filter corresponds exactly to a single RGB channel in our reconstructed image. But, these filters were likely imperfect and overlapping in sensitivity (ex: the red intensity is also impacted by green light). Also, our choices of wavelength distributions for rgb likely changed going from glass panels to jpg. As a result, we can get more accurate color if we model each filter's response as contributing to all three RGB channels rather than one.</p>
 
-    <p>I used <a href="https://viser.studio/main/">Viser</a> to create a tool where I could adjust the projections of the color channels and find a solution which qualitatively looks good.</p>
+    <p>I used <a href="https://viser.studio/main/">Viser</a> to create a tool where I could adjust the projections of the color channels and find a solution which looked good to me!</p>
 
     <div class="image-row">
       <div class="image-col">
@@ -149,7 +230,7 @@
 
     <p>Physically, this corresponds to some green light being allowed through the red and blue filters and contributing to the intensities in those channels. Green is between red and blue in the visible light spectrum so it's not surprising there might be some bleeding between the filters.</p>
 
-    <p>Below are images comparing the overlayed images before and after color correction. The impact of this change varies between photos and it doesn't fix other issues like exposure, but overall it gives (in my view) generally more realistic colors often removing green and purple tints on the images.</p>
+    <p>Below are images comparing the overlayed images before and after color correction. The impact of this change varies between photos and it doesn't fix other issues like exposure or contrast adjustment, but overall it gives (in my view) more realistic colors on many of the images often removing green and purple tints.</p>
   </div>
 
   
