@@ -32,7 +32,34 @@
     </div>
     <a href="https://en.wikipedia.org/wiki/Sergey_Prokudin-Gorsky">Sergei Mikhailovich Prokudin-Gorskii</a> traveled across Russia in the early 1900s capturing color photographs onto glass plates using glass filters. His glass plates were purchased by the <a href="https://www.loc.gov/collections/prokudin-gorskii/?st=grid">Library of Congress</a> and they digitized them offering the three color channel images in black and white which can be realigned to reconstruct the images in color.
 
-    <h2>Sobel Edge Detection Channel Alignment</h2>
+    <h2>Simple Approach</h2>
+    <div class="image-row">
+      <div class="image-col">
+        <figcaption>cathedral</figcaption>
+        <figure>
+          <img src="media/proj1/single_scale/cathedral.jpg" alt="" loading="lazy" class="feature-image">
+        </figure>
+      </div>
+      <div class="image-col">
+        <figcaption>monastery</figcaption>
+        <figure>
+          <img src="media/proj1/single_scale/monastery.jpg" alt="" loading="lazy" class="feature-image">
+        </figure>
+      </div>
+      <div class="image-col">
+        <figcaption>tobolsk</figcaption>
+        <figure>
+          <img src="media/proj1/single_scale/tobolsk.jpg" alt="Tobolsk" loading="lazy" class="feature-image">
+        </figure>
+      </div>
+    </div>
+    <figcaption style="text-align: center;">Single scale alignment results obtained by exhaustively searching over a 15 by 15 pixel window and finding the offsets with the lowest NCC.</figcaption>
+
+    <p>
+      A simple approach to this image alignment problem is to exhaustively search within a fixed window comparing the image channel values directly using normalized cross corellation (NCC) which is equivalent to a normalized dot product. In other words, we iteratively shift our image one pixel at a time and find the shift with the smallest NCC indicating the image channels are most aligned at that position. This approach works on the three smaller images above, but as the size of the image increases the search window size must also increase which quickly becomes computationally large.
+    </p>
+
+    <h2>Sobel Edge Detection and Multi-Scale Channel Alignment</h2>
     <p>
       Aligning the color channels directly is difficult because their intensities are scaled differently and change differently across the image. Because of this, I chose to use edges as my alignment features because they are generally more consistent across image channels.
     </p>
@@ -41,7 +68,7 @@
     </p>
 
     <p>
-      To align align the images I start by shrinking them by the largest power of 2 such that they're still larger than 256x256. Then, I compute the edge detection image features. I iterate over a 40 by 40 search window centered at the origin, shifting the blue and green features then checking their alignment with the red channel's features. I compare alignments by taking the normalized dot product and taking the shift which yields the highest value.
+      To align align the images I start by shrinking them by the largest power of 2 such that they're still larger than 256x256. Then, I compute the edge detection image features. I iterate over a 40 by 40 search window centered at the origin, shifting the blue and green features then checking their alignment with the red channel's features. I compare alignments by taking the normalized dot product (NCC) and taking the shift which yields the highest value.
       Then, I move up to double the resolution and repeat the process with the search window centered based on the previous iterations offset (adjusted to the new scale). I crop the images to be at most 700 by 700 and always crop at least 5% on each side to remove the impact of the borders.
     </p>
 
