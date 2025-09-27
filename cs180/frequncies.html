@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fun With Image Frequencies</title>
+  <link rel="stylesheet" href="frequencies.css">
+  <style>
+    .small-centered-image {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .small-centered-image figure {
+      margin: 0;
+      flex: none;
+    }
+    .small-centered-image img {
+      max-width: 25%;
+      max-height: 25%;
+      display: block;
+      margin: 0 auto;
+    }
+    .large-filter-images {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+    }
+    .large-filter-images figure {
+      margin: 0;
+      flex: none;
+    }
+    .large-filter-images img {
+      width: 200px;
+      height: 200px;
+      object-fit: contain;
+      display: block;
+      image-rendering: pixelated;
+      image-rendering: -moz-crisp-edges;
+      image-rendering: crisp-edges;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Fun with Image Frequencies</h1>
+<p class="center_p">Andrew Goldberg</p>
+
+<div class="content-container">
+  <h2>Convolution Implementation</h2>
+  
+  <!-- Code Snippets Row -->
+  <div class="full-width-section">
+    <div class="image-row">
+      <figure>
+        <img src="media/proj2/part1/convolution_implementation/code_snippets/quad_for_loop.png" alt="Quadruple for loop convolution code">
+        <figcaption>Quadruple for loop implementation</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/part1/convolution_implementation/code_snippets/double_for_loop.png" alt="Double for loop convolution code">
+        <figcaption>Double for loop implementation</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <!-- DX Comparison Row -->
+  <div class="full-width-section">
+    <div class="image-row">
+      <figure>
+        <img src="media/proj2/part1/convolution_implementation/dx_comparison/convolution_quad_for_loop_dx.jpg" alt="Quadruple for loop dx result">
+        <figcaption>Quadruple for loop (.35s)</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/part1/convolution_implementation/dx_comparison/convolution_double_for_loop_dx.jpg" alt="Double for loop dx result">
+        <figcaption>Double for loop (.40s)</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/part1/convolution_implementation/dx_comparison/convolve2d_dx.jpg" alt="Scipy convolve2d dx result">
+        <figcaption>Scipy (.0027s)</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <p>The outcome of all three methods is the same, but the double for loop approach improves over the quadruple for loop by vectorizing the application of the convolution filter. I found for the 9x9 box blur the quad for-loop approach took 8.6 seconds, the double for-loop approach took .45 seconds, and scipy's implementation took .0027 seconds. Asymtotically a double vs quad for-loop won't change the runtime since they compute the same number of multiplication and addition operations, but in practice the double for-loop runs much faster on larger filters. When using the finite difference operator however, I found the quadruple for-loop approach was slightly faster which I expect is due to there being more overhead in slicing a numpy array than benefit in vectorizing the filter application when it is only three values. Boundaries are handled by adding padding such that after the convolution is applied the image will be the same size. The image will be reduced in size by the filter dimensions - 1, and my padding accounts for this.</p>
+
+  <!-- Original Image Row -->
+  <div class="full-width-section">
+    <div class="image-row">
+      <figure>
+        <img src="media/proj2/part1/convolution_implementation/partials/me_and_squirrel/me_and_squirrel.JPG" alt="Original me and squirrel image">
+        <figcaption>Image</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <!-- Me and Squirrel Processing Results Row -->
+  <div class="full-width-section">
+    <div class="image-row">
+      <figure>
+        <img src="media/proj2/part1/convolution_implementation/partials/me_and_squirrel/convolve2d_box9x9.jpg" alt="Box 9x9 filter result">
+        <figcaption>Box 9x9</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/part1/convolution_implementation/partials/me_and_squirrel/convolve2d_dx.jpg" alt="DX gradient result">
+        <figcaption>DX</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/part1/convolution_implementation/partials/me_and_squirrel/convolve2d_dy.jpg" alt="DY gradient result">
+        <figcaption>DY</figcaption>
+      </figure>
+    </div>
+  </div>
+</div>
+
+<h2>Cameraman Edge Images</h2>
+
+  <!-- Original Cameraman and Best Threshold Row -->
+  <div class="full-width-section">
+    <div class="image-row">
+      <figure>
+        <img src="media/proj2/part1/convolution_implementation/partials/cameraman/cameraman.png" alt="Original cameraman image">
+        <figcaption>Original Image</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/part1/edge_thresholds/no_blur/no_blur_gradient_magnitude_thresholded_0.29.jpg" alt="Best threshold 0.32">
+        <figcaption>Best Threshold (0.29)</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <!-- Cameraman Edge Images Row -->
+  <div class="full-width-section">
+    <div class="image-row">
+      <figure>
+        <img src="media/proj2/part1/convolution_implementation/partials/cameraman/convolve2d_dx.jpg" alt="Cameraman DX gradient">
+        <figcaption>DX</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/part1/convolution_implementation/partials/cameraman/convolve2d_dy.jpg" alt="Cameraman DY gradient">
+        <figcaption>DY</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/part1/convolution_implementation/partials/cameraman/no_blur_gradient_magnitude.jpg" alt="Cameraman gradient magnitude">
+        <figcaption>Gradient Magnitude</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <!-- Edge Threshold Images Row -->
+  <div class="full-width-section">
+    <div class="image-row">
+      <figure>
+        <img src="media/proj2/part1/edge_thresholds/no_blur/no_blur_gradient_magnitude_thresholded_0.14.jpg" alt="Threshold 0.14">
+        <figcaption>0.14</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/part1/edge_thresholds/no_blur/no_blur_gradient_magnitude_thresholded_0.17.jpg" alt="Threshold 0.17">
+        <figcaption>0.17</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/part1/edge_thresholds/no_blur/no_blur_gradient_magnitude_thresholded_0.20.jpg" alt="Threshold 0.20">
+        <figcaption>0.20</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/part1/edge_thresholds/no_blur/no_blur_gradient_magnitude_thresholded_0.23.jpg" alt="Threshold 0.23">
+        <figcaption>0.23</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/part1/edge_thresholds/no_blur/no_blur_gradient_magnitude_thresholded_0.26.jpg" alt="Threshold 0.26">
+        <figcaption>0.26</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/part1/edge_thresholds/no_blur/no_blur_gradient_magnitude_thresholded_0.29.jpg" alt="Threshold 0.29">
+        <figcaption>0.29</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/part1/edge_thresholds/no_blur/no_blur_gradient_magnitude_thresholded_0.32.jpg" alt="Threshold 0.32">
+        <figcaption>0.32</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/part1/edge_thresholds/no_blur/no_blur_gradient_magnitude_thresholded_0.35.jpg" alt="Threshold 0.35">
+        <figcaption>0.35</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/part1/edge_thresholds/no_blur/no_blur_gradient_magnitude_thresholded_0.38.jpg" alt="Threshold 0.38">
+        <figcaption>0.38</figcaption>
+      </figure>
+    </div>
+
+    <p class="center_p">Binarized gradient magnitude at different threshold values. I chose .29 as my best result balancing removing noise with maintaining important edges.</p>
+  </div>
+
+   <h2>Cameraman Images With Gaussian Blur</h2>
+
+  <!-- Filter Visualizations Row -->
+  <div class="full-width-section">
+    <div class="image-row large-filter-images">
+      <figure>
+        <img src="media/proj2/part1/filter_visualizations/gaussian.jpg" alt="Gaussian filter">
+        <figcaption>Gaussian</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/part1/filter_visualizations/DOG_X.jpg" alt="DOG X filter">
+        <figcaption>DoG X</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/part1/filter_visualizations/DOG_Y.jpg" alt="DOG Y filter">
+        <figcaption>DoG Y</figcaption>
+      </figure>
+    </div>
+    <p class="center_p">Gaussian and difference of gaussian filters visualized</p>
+  </div>
+
+  <!-- Blurred Cameraman and Best Threshold Row -->
+  <div class="full-width-section">
+    <div class="image-row">
+      <figure>
+        <img src="media/proj2/part1/convolution_implementation/partials/cameraman/cameraman_blurred.jpg" alt="Blurred cameraman image">
+        <figcaption>Blurred Image</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/part1/edge_thresholds/with_blur/blur_gradient_magnitude_thresholded_0.17.jpg" alt="Best threshold 0.17 with blur">
+        <figcaption>Best Threshold (0.17)</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <!-- Gaussian Blur + Finite Difference Operators Row -->
+  <div class="full-width-section">
+    <div class="image-row">
+      <figure>
+        <img src="media/proj2/part1/convolution_implementation/partials/cameraman/blur_dx.jpg" alt="Blurred DX gradient">
+        <figcaption>DX</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/part1/convolution_implementation/partials/cameraman/blur_dy.jpg" alt="Blurred DY gradient">
+        <figcaption>DY</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/part1/convolution_implementation/partials/cameraman/blur_gradient_magnitude.jpg" alt="Blurred gradient magnitude">
+        <figcaption>Gradient Magnitude</figcaption>
+      </figure>
+    </div>
+    <p class="center_p">Edge detection after gaussian blur is applied</p>
+  </div>
+
+  <!-- Difference of Gaussian (DoG) Filters Row -->
+  <div class="full-width-section">
+    <div class="image-row">
+      <figure>
+        <img src="media/proj2/part1/convolution_implementation/partials/cameraman/DOG_X_gradient.jpg" alt="DOG X gradient">
+        <figcaption>DoG X</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/part1/convolution_implementation/partials/cameraman/DOG_Y_gradient.jpg" alt="DOG Y gradient">
+        <figcaption>DoG Y</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/part1/convolution_implementation/partials/cameraman/DOG_gradient_magnitude.jpg" alt="DOG gradient magnitude">
+        <figcaption>DoG Gradient Magnitude</figcaption>
+      </figure>
+    </div>
+    <p class="center_p">Combined difference of gaussian filter (DoG)</p>
+  </div>
+
+  <!-- Blur Edge Threshold Images Row -->
+  <div class="full-width-section">
+    <div class="image-row">
+      <figure>
+        <img src="media/proj2/part1/edge_thresholds/with_blur/blur_gradient_magnitude_thresholded_0.14.jpg" alt="Blur threshold 0.14">
+        <figcaption>0.14</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/part1/edge_thresholds/with_blur/blur_gradient_magnitude_thresholded_0.17.jpg" alt="Blur threshold 0.17">
+        <figcaption>0.17</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/part1/edge_thresholds/with_blur/blur_gradient_magnitude_thresholded_0.20.jpg" alt="Blur threshold 0.20">
+        <figcaption>0.20</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/part1/edge_thresholds/with_blur/blur_gradient_magnitude_thresholded_0.23.jpg" alt="Blur threshold 0.23">
+        <figcaption>0.23</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/part1/edge_thresholds/with_blur/blur_gradient_magnitude_thresholded_0.26.jpg" alt="Blur threshold 0.26">
+        <figcaption>0.26</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/part1/edge_thresholds/with_blur/blur_gradient_magnitude_thresholded_0.29.jpg" alt="Blur threshold 0.29">
+        <figcaption>0.29</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/part1/edge_thresholds/with_blur/blur_gradient_magnitude_thresholded_0.32.jpg" alt="Blur threshold 0.32">
+        <figcaption>0.32</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/part1/edge_thresholds/with_blur/blur_gradient_magnitude_thresholded_0.35.jpg" alt="Blur threshold 0.35">
+        <figcaption>0.35</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/part1/edge_thresholds/with_blur/blur_gradient_magnitude_thresholded_0.38.jpg" alt="Blur threshold 0.38">
+        <figcaption>0.38</figcaption>
+      </figure>
+    </div>
+  </div>
+  <p class="center_p">We can see that applying a gaussian filter then finite difference operator gives the same result as applying the DoG operator. The thresholded gradient magnitude shows much stronger edges and less noise compared to when we didn't apply gaussian blur where the edges looked more jagged. The blurring also reduces the absolute magnitude of all the edges so the threshold used in the DoG case is lower than in the case where we directly apply the finite difference operators.</p>
+
+   <h2>Image Sharpening</h2>
+
+  <!-- Original Taj Mahal and High Frequencies Row -->
+  <div class="full-width-section">
+    <div class="image-row">
+      <figure>
+        <img src="media/proj2/sharpening/taj_mahal/taj_mahal.jpg" alt="Original Taj Mahal image">
+        <figcaption>Original Image</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/sharpening/taj_mahal/high_freqs.jpg" alt="High frequencies">
+        <figcaption>High Frequencies</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <!-- Blurred Image and Sharpened Image Row -->
+  <div class="full-width-section">
+    <div class="image-row">
+      <figure>
+        <img src="media/proj2/sharpening/taj_mahal/blur_image.jpg" alt="Blurred image">
+        <figcaption>Blurred Image</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/sharpening/taj_mahal/blur_image-sharpened.jpg" alt="Sharpened blurred image">
+        <figcaption>Sharpened / "Unblurred" Image</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <!-- Sharpening Levels Row -->
+  <div class="full-width-section">
+    <div class="image-row">
+      <figure>
+        <img src="media/proj2/sharpening/taj_mahal/sharpening_levels/shaprened_1.00.jpg" alt="Sharpening level 1.00">
+        <figcaption>1.00</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/sharpening/taj_mahal/sharpening_levels/shaprened_2.00.jpg" alt="Sharpening level 2.00">
+        <figcaption>2.00</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/sharpening/taj_mahal/sharpening_levels/shaprened_3.00.jpg" alt="Sharpening level 3.00">
+        <figcaption>3.00</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/sharpening/taj_mahal/sharpening_levels/shaprened_4.00.jpg" alt="Sharpening level 4.00">
+        <figcaption>4.00</figcaption>
+      </figure>
+    </div>
+
+    <p class="center_p">Images at different sharpening strengths</p>
+    <p class="center_p">The unsharp mask filter works by increasing the relative strength of high frequency features in the image making it appear overall sharper. When we convolve a gaussian kernel on an image we are applying a low-pass filter meaning we remove high frequencies. We can take our original image and subtract it from the low-passsed image to isolate high frequencies. Then we can add the high frequencies back at different strengths in order to "sharpen" our image! This operation can also be combined into one kernel by taking a weighted sum between a unit impulse and negative gaussian kernel.</p>
+  </div>
+
+  <!-- Original Faculty and High Frequencies Row -->
+  <div class="full-width-section">
+    <div class="image-row">
+      <figure>
+        <img src="media/proj2/sharpening/faculty/faculty.JPG" alt="Original faculty image">
+        <figcaption>Original Image</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/sharpening/faculty/high_freqs.jpg" alt="High frequencies">
+        <figcaption>High Frequencies</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <!-- Blurred Faculty Image and Sharpened Image Row -->
+  <div class="full-width-section">
+    <div class="image-row">
+      <figure>
+        <img src="media/proj2/sharpening/faculty/blur_image.jpg" alt="Blurred faculty image">
+        <figcaption>Blurred Image</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/sharpening/faculty/blur_image-sharpened.jpg" alt="Sharpened blurred faculty image">
+        <figcaption>Sharpened / "Unblurred" Image</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <!-- Faculty Sharpening Levels Row -->
+  <div class="full-width-section">
+    <div class="image-row">
+      <figure>
+        <img src="media/proj2/sharpening/faculty/sharpening_levels/shaprened_1.00.jpg" alt="Faculty sharpening level 1.00">
+        <figcaption>1.00</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/sharpening/faculty/sharpening_levels/shaprened_2.00.jpg" alt="Faculty sharpening level 2.00">
+        <figcaption>2.00</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/sharpening/faculty/sharpening_levels/shaprened_3.00.jpg" alt="Faculty sharpening level 3.00">
+        <figcaption>3.00</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/sharpening/faculty/sharpening_levels/shaprened_4.00.jpg" alt="Faculty sharpening level 4.00">
+        <figcaption>4.00</figcaption>
+      </figure>
+    </div>
+
+    <p class="center_p">Images at different sharpening strengths</p>
+  </div>
+
+  <p class="center_p">I was suprised how well the sharpening was able to undo the gaussian blur! The sharpened images look better to me in some places, but with softer elements like trees it starts to look very unnatural for them to have such sharp edges. In the image by 4.0 hill the people in the white flowers in the grass start to pop more as the sharpening increases.</p>
+
+   <h2>Hybrid Images</h2>
+
+  <!-- Original Images Row -->
+  <div class="full-width-section">
+    <div class="image-row">
+      <figure>
+        <img src="media/proj2/duck_penguin_hybrid/duck.jpg" alt="Original duck image">
+        <figcaption>Duck</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/duck_penguin_hybrid/penguin.jpg" alt="Original penguin image">
+        <figcaption>Penguin</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <!-- Aligned Images Row -->
+  <div class="full-width-section">
+    <div class="image-row">
+      <figure>
+        <img src="media/proj2/duck_penguin_hybrid/duck_aligned.jpg" alt="Aligned duck image">
+        <figcaption>Duck Aligned</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/duck_penguin_hybrid/penguin_aligned.jpg" alt="Aligned penguin image">
+        <figcaption>Penguin Aligned</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <!-- Hybrid Frequency Image Row -->
+  <div class="full-width-section">
+    <div class="image-row">
+      <figure>
+        <img src="media/proj2/duck_penguin_hybrid/fft/hybrid_freq_img.jpg" alt="Hybrid frequency image">
+        <figcaption>Hybrid Image</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/duck_penguin_hybrid/fft/hybrid_freq.jpg" alt="Hybrid frequency FFT">
+        <figcaption>FFT</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <!-- Small Hybrid Frequency Image Row -->
+  <div class="full-width-section">
+    <div class="image-row small-centered-image">
+      <figure>
+        <img src="media/proj2/duck_penguin_hybrid/fft/hybrid_freq_img.jpg" alt="Small hybrid frequency image">
+        <figcaption>Hybrid Image Displayed Smaller</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <!-- IM1 Analysis Row -->
+  <div class="full-width-section">
+    <div class="image-row">
+      <figure>
+        <img src="media/proj2/duck_penguin_hybrid/fft/im1_img.jpg" alt="IM1 grayscale image">
+        <figcaption>Grayscale Image</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/duck_penguin_hybrid/fft/im1.jpg" alt="IM1 FFT">
+        <figcaption>FFT</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/duck_penguin_hybrid/fft/im1_low_freq_img.jpg" alt="IM1 filtered image">
+        <figcaption>Filtered Image (Low-pass)</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/duck_penguin_hybrid/fft/im1_low_freq.jpg" alt="IM1 filtered FFT">
+        <figcaption>FFT</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <!-- IM2 Analysis Row -->
+  <div class="full-width-section">
+    <div class="image-row">
+      <figure>
+        <img src="media/proj2/duck_penguin_hybrid/fft/im2_img.jpg" alt="IM2 grayscale image">
+        <figcaption>Grayscale Image</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/duck_penguin_hybrid/fft/im2.jpg" alt="IM2 FFT">
+        <figcaption>FFT</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/duck_penguin_hybrid/fft/im2_high_freq_img.jpg" alt="IM2 filtered image">
+        <figcaption>Filtered Image (High-pass)</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/duck_penguin_hybrid/fft/im2_high_freq.jpg" alt="IM2 filtered FFT">
+        <figcaption>FFT</figcaption>
+      </figure>
+    </div>
+    <p class="center_p">For my filters I chose to use σ=10 on my low-pass and σ=3 for my high-pass/sharpening with α=1</p>
+  </div>
+
+  <h2>Additional Hybrid Images</h2>
+
+  <!-- Cat Man Row -->
+  <div class="full-width-section">
+    <div class="image-row">
+      <figure>
+        <img src="media/proj2/cat_man/DerekPicture.jpg" alt="Derek picture">
+        <figcaption>Derek Picture</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/cat_man/hybrid.jpg" alt="Cat man hybrid">
+        <figcaption>Hybrid</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/cat_man/nutmeg.jpg" alt="Nutmeg cat">
+        <figcaption>Nutmeg</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <!-- Duck Penguin Weird Hybrid Row -->
+  <div class="full-width-section">
+    <div class="image-row">
+      <figure>
+        <img src="media/proj2/duck_penguin_weird_hybrid/duck_blend.jpg" alt="Duck blend">
+        <figcaption>Duck Blend</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/duck_penguin_weird_hybrid/hybrid.jpg" alt="Weird hybrid">
+        <figcaption>Hybrid</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/duck_penguin_weird_hybrid/penguin_blend.jpg" alt="Penguin blend">
+        <figcaption>Penguin Blend</figcaption>
+      </figure>
+    </div>
+  </div>
+
+   <h2>Oraple - Image Blending</h2>
+
+  <!-- Original Images Row -->
+  <div class="full-width-section">
+    <div class="image-row">
+      <figure>
+        <img src="media/proj2/oraple/apple.jpeg" alt="Apple image">
+        <figcaption>Apple</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/oraple/orange.jpeg" alt="Orange image">
+        <figcaption>Orange</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <!-- Merge Results Row -->
+  <div class="full-width-section">
+    <div class="image-row">
+      <figure>
+        <img src="media/proj2/oraple/trivial_merge.jpg" alt="Trivial merge">
+        <figcaption>Trivial Merging</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/oraple/merged.jpg" alt="Merged image">
+        <figcaption>Blended Merging</figcaption>
+      </figure>
+    </div>
+    <p class="center_p">"Trivial Merging" refers to directly using a mask to make a binary assignment for which image's pixels to use. Blended mergin utilizes laplacian stacks of both images to obtain a smoothly connected effect!</p>
+  </div>
+
+
+  <!-- Gaussian Stack IM1 Row -->
+  <div class="full-width-section">
+    <div class="image-row">
+      <figure>
+        <img src="media/proj2/oraple/stack_viz/gaussian_im1_0.jpg" alt="Gaussian im1 0">
+      </figure>
+      <figure>
+        <img src="media/proj2/oraple/stack_viz/gaussian_im1_1.jpg" alt="Gaussian im1 1">
+      </figure>
+      <figure>
+        <img src="media/proj2/oraple/stack_viz/gaussian_im1_2.jpg" alt="Gaussian im1 2">
+      </figure>
+      <figure>
+        <img src="media/proj2/oraple/stack_viz/gaussian_im1_3.jpg" alt="Gaussian im1 3">
+      </figure>
+      <figure>
+        <img src="media/proj2/oraple/stack_viz/gaussian_im1_4.jpg" alt="Gaussian im1 4">
+      </figure>
+      <figure>
+        <img src="media/proj2/oraple/stack_viz/gaussian_im1_5.jpg" alt="Gaussian im1 5">
+      </figure>
+    </div>
+  </div>
+
+  <!-- Gaussian Stack IM2 Row -->
+  <div class="full-width-section">
+    <div class="image-row">
+      <figure>
+        <img src="media/proj2/oraple/stack_viz/gaussian_im2_0.jpg" alt="Gaussian im2 0">
+      </figure>
+      <figure>
+        <img src="media/proj2/oraple/stack_viz/gaussian_im2_1.jpg" alt="Gaussian im2 1">
+      </figure>
+      <figure>
+        <img src="media/proj2/oraple/stack_viz/gaussian_im2_2.jpg" alt="Gaussian im2 2">
+      </figure>
+      <figure>
+        <img src="media/proj2/oraple/stack_viz/gaussian_im2_3.jpg" alt="Gaussian im2 3">
+      </figure>
+      <figure>
+        <img src="media/proj2/oraple/stack_viz/gaussian_im2_4.jpg" alt="Gaussian im2 4">
+      </figure>
+      <figure>
+        <img src="media/proj2/oraple/stack_viz/gaussian_im2_5.jpg" alt="Gaussian im2 5">
+      </figure>
+    </div>
+
+    <p class="center_p">Gaussian image stacks</p>
+  </div>
+
+  <!-- Laplacian Stack IM1 Row -->
+  <div class="full-width-section">
+    <div class="image-row">
+      <figure>
+        <img src="media/proj2/oraple/stack_viz/laplacian_im1_0.jpg" alt="Laplacian im1 0">
+      </figure>
+      <figure>
+        <img src="media/proj2/oraple/stack_viz/laplacian_im1_1.jpg" alt="Laplacian im1 1">
+      </figure>
+      <figure>
+        <img src="media/proj2/oraple/stack_viz/laplacian_im1_2.jpg" alt="Laplacian im1 2">
+      </figure>
+      <figure>
+        <img src="media/proj2/oraple/stack_viz/laplacian_im1_3.jpg" alt="Laplacian im1 3">
+      </figure>
+      <figure>
+        <img src="media/proj2/oraple/stack_viz/laplacian_im1_4.jpg" alt="Laplacian im1 4">
+      </figure>
+      <figure>
+        <img src="media/proj2/oraple/stack_viz/laplacian_im1_5.jpg" alt="Laplacian im1 5">
+      </figure>
+    </div>
+  </div>
+
+  <!-- Laplacian Stack IM2 Row -->
+  <div class="full-width-section">
+    <div class="image-row">
+      <figure>
+        <img src="media/proj2/oraple/stack_viz/laplacian_im2_0.jpg" alt="Laplacian im2 0">
+      </figure>
+      <figure>
+        <img src="media/proj2/oraple/stack_viz/laplacian_im2_1.jpg" alt="Laplacian im2 1">
+      </figure>
+      <figure>
+        <img src="media/proj2/oraple/stack_viz/laplacian_im2_2.jpg" alt="Laplacian im2 2">
+      </figure>
+      <figure>
+        <img src="media/proj2/oraple/stack_viz/laplacian_im2_3.jpg" alt="Laplacian im2 3">
+      </figure>
+      <figure>
+        <img src="media/proj2/oraple/stack_viz/laplacian_im2_4.jpg" alt="Laplacian im2 4">
+      </figure>
+      <figure>
+        <img src="media/proj2/oraple/stack_viz/laplacian_im2_5.jpg" alt="Laplacian im2 5">
+      </figure>
+    </div>
+    <p class="center_p">Laplacian image stacks</p>
+  </div>
+
+  <!-- Mask and Merge Grid (3x4) -->
+  <div class="full-width-section">
+    <div class="image-row">
+      <figure>
+        <img src="media/proj2/oraple/stack_viz/mask_0_1.jpg" alt="Mask 1 1">
+      </figure>
+      <figure>
+        <img src="media/proj2/oraple/stack_viz/mask_0_2.jpg" alt="Mask 1 2">
+      </figure>
+      <figure>
+        <img src="media/proj2/oraple/stack_viz/merge_0.jpg" alt="Merge 1">
+      </figure>
+    </div>
+  </div>
+
+  <div class="full-width-section">
+    <div class="image-row">
+      <figure>
+        <img src="media/proj2/oraple/stack_viz/mask_2_1.jpg" alt="Mask 2 1">
+      </figure>
+      <figure>
+        <img src="media/proj2/oraple/stack_viz/mask_2_2.jpg" alt="Mask 2 2">
+      </figure>
+      <figure>
+        <img src="media/proj2/oraple/stack_viz/merge_2.jpg" alt="Merge 2">
+      </figure>
+    </div>
+  </div>
+
+  <div class="full-width-section">
+    <div class="image-row">
+      <figure>
+        <img src="media/proj2/oraple/stack_viz/mask_4_1.jpg" alt="Mask 4 1">
+      </figure>
+      <figure>
+        <img src="media/proj2/oraple/stack_viz/mask_4_2.jpg" alt="Mask 4 2">
+      </figure>
+      <figure>
+        <img src="media/proj2/oraple/stack_viz/merge_4.jpg" alt="Merge 4">
+      </figure>
+    </div>
+  </div>
+
+  <div class="full-width-section">
+    <div class="image-row">
+      <figure>
+        <img src="media/proj2/oraple/left_stack.jpg" alt="Left stack">
+        <figcaption>Left Stack</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/oraple/right_stack.jpg" alt="Right stack">
+        <figcaption>Right Stack</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/oraple/merged.jpg" alt="Final merged">
+        <figcaption>Merged</figcaption>
+      </figure>
+    </div>
+
+    <p class="center_p">The first 3 rows show masking applied at different laplacian layers while the final row shows the combination of the aggregated laplacian mask. We can see that on the mask seam the image gets blurred with lower frequencies being merged over a larger distance than higher frequencies. The overall result gives the impression of the two images merging smoothly.</p>
+  </div>
+
+   <h2>Other Image Blending</h2>
+
+  <!-- Altoid TD Images Row -->
+  <div class="full-width-section">
+    <div class="image-row">
+      <figure>
+        <img src="media/proj2/altoid_camera/altoid_td.jpg" alt="Altoid TD">
+        <figcaption>Altoid TD</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/altoid_camera/cam_td.jpg" alt="Camera TD">
+        <figcaption>Camera TD</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <!-- Merged and Trivial Row -->
+  <div class="full-width-section">
+    <div class="image-row">
+      <figure>
+        <img src="media/proj2/altoid_camera/trivial.jpg" alt="Trivial altoid camera">
+        <figcaption>Trivial Merging</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/altoid_camera/merged.jpg" alt="Merged altoid camera">
+        <figcaption>Blended Merging</figcaption>
+      </figure>
+    </div>
+    <p class="center_p">I chose to do the merging on a cropped section of the image because I thought it looked the coolest!</p>
+  </div>
+
+  <!-- Altoid Stack Visualization Row -->
+  <div class="full-width-section">
+    <div class="image-row">
+      <figure>
+        <img src="media/proj2/altoid_camera/altoid_stack_viz/gaussian_0.jpg" alt="Gaussian 0">
+      </figure>
+      <figure>
+        <img src="media/proj2/altoid_camera/altoid_stack_viz/gaussian_1.jpg" alt="Gaussian 1">
+      </figure>
+      <figure>
+        <img src="media/proj2/altoid_camera/altoid_stack_viz/gaussian_2.jpg" alt="Gaussian 2">
+      </figure>
+      <figure>
+        <img src="media/proj2/altoid_camera/altoid_stack_viz/gaussian_3.jpg" alt="Gaussian 3">
+      </figure>
+      <figure>
+        <img src="media/proj2/altoid_camera/altoid_stack_viz/gaussian_4.jpg" alt="Gaussian 4">
+      </figure>
+      <figure>
+        <img src="media/proj2/altoid_camera/altoid_stack_viz/gaussian_5.jpg" alt="Gaussian 5">
+      </figure>
+      <figure>
+        <img src="media/proj2/altoid_camera/altoid_stack_viz/laplacian_0.jpg" alt="Laplacian 0">
+      </figure>
+      <figure>
+        <img src="media/proj2/altoid_camera/altoid_stack_viz/laplacian_1.jpg" alt="Laplacian 1">
+      </figure>
+      <figure>
+        <img src="media/proj2/altoid_camera/altoid_stack_viz/laplacian_2.jpg" alt="Laplacian 2">
+      </figure>
+      <figure>
+        <img src="media/proj2/altoid_camera/altoid_stack_viz/laplacian_3.jpg" alt="Laplacian 3">
+      </figure>
+      <figure>
+        <img src="media/proj2/altoid_camera/altoid_stack_viz/laplacian_4.jpg" alt="Laplacian 4">
+      </figure>
+      <figure>
+        <img src="media/proj2/altoid_camera/altoid_stack_viz/laplacian_5.jpg" alt="Laplacian 5">
+      </figure>
+    </div>
+
+    <p class="center_p">Gaussian and Laplacian stack of altoid image</p>
+  </div>
+
+  <h2>Animal Duck Blending</h2>
+
+  <!-- Animal Duck Images Row -->
+  <div class="full-width-section">
+    <div class="image-row">
+      <figure>
+        <img src="media/proj2/animal_duck/animal.jpg" alt="Animal image">
+        <figcaption>Stuffed Animal</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/animal_duck/duck_duck_background.jpg" alt="Duck background">
+        <figcaption>Duck with Ducks</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj2/animal_duck/good_mask_duck_animal.png" alt="Good mask">
+        <figcaption>Mask</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <!-- Animal Duck Merged Row -->
+  <div class="full-width-section">
+    <div class="image-row">
+      <figure>
+        <img src="media/proj2/animal_duck/merged.jpg" alt="Merged animal duck">
+        <figcaption>Merged</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <p class="center_p">I used matplotlib events to write my own mask drawing application where I could overlay two images and draw. I think the outcome turned out quite realistic!</p>
+
+</body>
+</html>
