@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image stitching</title>
+  <link rel="stylesheet" href="stitching.css">
+</head>
+<body>
+  <div class="content-container">
+    <h1>Image Stitching</h1>
+    <p class="center_p">Andrew Goldberg</p>
+    
+    <!-- Old Building Mosaic -->
+    <div class="full-width-section">
+      <div class="image-row">
+        <figure>
+          <img src="media/proj3/mosaics/old_building/1.jpg" alt="Old Building Image 1">
+        </figure>
+        <figure>
+          <img src="media/proj3/mosaics/old_building/2.jpg" alt="Old Building Image 2">
+        </figure>
+        <figure>
+          <img src="media/proj3/mosaics/old_building/3.jpg" alt="Old Building Image 3">
+        </figure>
+        <figure>
+          <img src="media/proj3/mosaics/old_building/4.jpg" alt="Old Building Image 4">
+        </figure>
+      </div>
+    </div>
+
+    <!-- SOCS Mosaic -->
+    <div class="full-width-section">
+      <div class="image-row">
+        <figure>
+          <img src="media/proj3/mosaics/socs/1.jpg" alt="SOCS Image 1">
+        </figure>
+        <figure>
+          <img src="media/proj3/mosaics/socs/2.jpg" alt="SOCS Image 2">
+        </figure>
+        <figure>
+          <img src="media/proj3/mosaics/socs/3.jpg" alt="SOCS Image 3">
+        </figure>
+        <figure>
+          <img src="media/proj3/mosaics/socs/4.jpg" alt="SOCS Image 4">
+        </figure>
+      </div>
+    </div>
+
+    <!-- Window 2 Mosaic -->
+    <div class="full-width-section">
+      <div class="image-row">
+        <figure>
+          <img src="media/proj3/mosaics/window_2/1.jpg" alt="Window 2 Image 1">
+        </figure>
+        <figure>
+          <img src="media/proj3/mosaics/window_2/2.jpg" alt="Window 2 Image 2">
+        </figure>
+        <figure>
+          <img src="media/proj3/mosaics/window_2/3.jpg" alt="Window 2 Image 3">
+        </figure>
+      </div>
+    </div>
+
+    <!-- Caption -->
+    <div class="center_p">
+      <p><em>These are the images we will stitch! They were captured by changing the view direction, but maintaining the position of the center of projection</em></p>
+    </div>
+  </div>
+
+
+  <h1>Solving for Homographies</h1>
+
+  <!-- Correlation Pair Images -->
+  <div class="full-width-section">
+    <h2>Correlation Pair Analysis</h2>
+    <div class="image-row">
+      <figure>
+        <img src="media/proj3/mosaics/socs/corr_pair0_0.jpg" alt="Correlation Pair 0-0">
+      </figure>
+      <figure>
+        <img src="media/proj3/mosaics/socs/corr_pair0_1.jpg" alt="Correlation Pair 0-1">
+      </figure>
+    </div>
+    <figcaption>Correspondence Pair</figcaption>
+    
+    <!-- Homography Matrix Display -->
+    <div class="matrix-container">
+      <h3>Homography Matrix H₀</h3>
+      <div class="matrix-display">
+        <table class="homography-matrix">
+          <tr>
+            <td>1.164</td>
+            <td>0.125</td>
+            <td>-387.912</td>
+          </tr>
+          <tr>
+            <td>-0.048</td>
+            <td>1.348</td>
+            <td>-1449.792</td>
+          </tr>
+          <tr>
+            <td>-0.000</td>
+            <td>0.000</td>
+            <td>1.000</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mathematical Explanation -->
+  <div class="content-container">
+    <h2>Homography Estimation Using Least Squares</h2>
+    
+    <div class="math-section">
+      <h3>Problem</h3>
+      <p>A homography is a 3×3 matrix <strong>H</strong> that relates corresponding points between two images through the equation:</p>
+      
+      <div class="equation">
+        <strong>H</strong> <strong>x</strong> = <strong>x'</strong>
+      </div>
+      
+      <p>Where <strong>x</strong> = [x, y, 1]ᵀ and <strong>x'</strong> = [x', y', 1]ᵀ are homogeneous coordinates of corresponding points which we get through our click interface.</p>
+      
+      <h3>System of Equations</h3>
+      <p>For each correspondence pair (x, y), (x', y'), we can write two linear equations:</p>
+      
+      <div class="equation-block">
+        <p>h₁₁x + h₁₂y + h₁₃ - h₃₁xx' - h₃₂yx' = x'</p>
+        <p>h₂₁x + h₂₂y + h₂₃ - h₃₁xy' - h₃₂yy' = y'</p>
+      </div>
+      
+      <h3>Matrix Form</h3>
+      <p>This creates a system of equations <strong>A</strong><strong>h</strong> = <strong>b</strong> where:</p>
+      
+      <div class="equation-block">
+        <p><strong>A</strong> is a 2n×8 matrix (n = number of correspondences)</p>
+        <p><strong>h</strong> = [h₁₁, h₁₂, h₁₃, h₂₁, h₂₂, h₂₃, h₃₁, h₃₂]ᵀ (8 unknowns)</p>
+        <p><strong>b</strong> contains the target coordinates [x₁', y₁', x₂', y₂', ...]ᵀ</p>
+      </div>
+      
+      <h3>Least Squares Solution</h3>
+      <p>We solve for <strong>h</strong> using least squares:</p>
+      
+      <div class="equation">
+        <strong>h</strong> = (<strong>A</strong>ᵀ<strong>A</strong>)⁻¹<strong>A</strong>ᵀ<strong>b</strong>
+      </div>
+      
+      <p>The final homography matrix is constructed as:</p>
+      
+      <div class="equation-block">
+        <p><strong>H</strong> = [h₁₁  h₁₂  h₁₃]</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[h₂₁  h₂₂  h₂₃]</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[h₃₁  h₃₂  1.0]</p>
+      </div>
+      
+    </div>
+  </div>
+
+  <!-- Image Warping and Rectification -->
+  <div class="full-width-section">
+    <h2>Image Warping and Rectification</h2>
+    
+    <!-- Football Rectification -->
+    <div class="rectification-section">
+      <h3>Football Rectification</h3>
+      
+      <!-- Correspondence Points Row -->
+      <div class="correspondence-row">
+        <figure>
+          <img src="media/proj3/rectification/football_rectify/correspondence_plot.jpg" alt="Football Correspondence Points">
+          <figcaption>Correspondence Points</figcaption>
+        </figure>
+      </div>
+      
+      <!-- Interpolation Methods Row -->
+      <div class="image-row football-interpolation">
+        <figure>
+          <img src="media/proj3/rectification/football_rectify/nearest_neighbor.jpg" alt="Football Nearest Neighbor">
+          <figcaption>Nearest Neighbor</figcaption>
+        </figure>
+        <figure>
+          <img src="media/proj3/rectification/football_rectify/bilinear.jpg" alt="Football Bilinear">
+          <figcaption>Bilinear</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <!-- Tissue Rectification -->
+    <div class="rectification-section">
+      <h3>Tissue Rectification</h3>
+      <div class="image-row">
+        <figure>
+          <img src="media/proj3/rectification/tissue_rectify/correspondence_plot.jpg" alt="Tissue Correspondence Points">
+          <figcaption>Correspondence Points</figcaption>
+        </figure>
+        <figure>
+          <img src="media/proj3/rectification/tissue_rectify/nearest_neighbor.jpg" alt="Tissue Nearest Neighbor">
+          <figcaption>Nearest Neighbor</figcaption>
+        </figure>
+        <figure>
+          <img src="media/proj3/rectification/tissue_rectify/bilinear.jpg" alt="Tissue Bilinear">
+          <figcaption>Bilinear</figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interpolation Comparison -->
+  <div class="content-container">
+    <div class="math-section">
+      <h3>Interpolation Method Comparison</h3>
+      
+      <p><strong>Performance:</strong> Bilinear interpolation takes longer than a nearest neighbor because the implementation requires copying shifts of the data and taking a weighted sum, but it's not excessively more expensive.</p>
+      
+      <p><strong>Visual Quality:</strong> When looking closely at the football field, especially in the bottom left corner, the nearest neighbor version appears more jagged while bilinear interpolation helps to provide some smoothing, resulting in a more natural appearance.</p>
+    </div>
+  </div>
+
+  <!-- Image Mosaics -->
+  <div class="full-width-section">
+    <h2>Image Mosaics</h2>
+    
+    <!-- SOCS Mosaic -->
+    <div class="mosaic-row">
+      <figure>
+        <img src="media/proj3/mosaics/socs/stitched_image_3.jpg" alt="SOCS Stitched Mosaic">
+      </figure>
+    </div>
+    
+    <!-- Old Building Mosaic -->
+    <div class="mosaic-row">
+      <figure>
+        <img src="media/proj3/mosaics/old_building/stitched_image_2.jpg" alt="Old Building Stitched Mosaic">
+      </figure>
+    </div>
+    
+    <!-- Window 2 Mosaic -->
+    <div class="mosaic-row">
+      <figure>
+        <img src="media/proj3/mosaics/window_2/stitched_image_1.jpg" alt="Window 2 Stitched Mosaic">
+      </figure>
+    </div>
+  </div>
+
+</body>
+</html>

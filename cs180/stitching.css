@@ -1,0 +1,543 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 40px;
+  line-height: 1.6;
+}
+
+/* Content container to constrain width on wide screens */
+.content-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Full-width section for images that should span wider than text but not full screen */
+.full-width-section {
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  padding: 20px 0;
+  background-color: #f9f9f9;
+}
+
+.full-width-section .image-row {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 60px;
+}
+
+.full-width-section figcaption {
+  text-align: center;
+  margin-top: 15px;
+}
+
+h1 {
+  text-align: center;
+}
+
+h2 {
+  font-size: 30px;
+  text-align: center;
+}
+
+.center_p {
+  text-align: center;
+}
+
+figure {
+  display: inline-block;
+  text-align: center;
+  margin: 20px 0;
+}
+
+figcaption {
+  font-style: italic;
+  font-size: 0.9em;
+  margin-top: 5px;
+}
+
+.image-row {
+  display: flex;
+  justify-content: center; /* centers all figures */
+  gap: 10px; /* space between images */
+}
+
+.image-row figure {
+  display: inline-block;
+  flex-direction: column; /* stack image and caption vertically */
+  align-items: center;    /* keep caption centered under image */
+  margin: 0;
+}
+
+.image-row img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Feature image loading states */
+.feature-image {
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  background-color: #f0f0f0;
+  min-height: 200px;
+  position: relative;
+}
+
+.feature-image.loaded {
+  opacity: 1;
+}
+
+.feature-image:not(.loaded) {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+.feature-image:not(.loaded)::after {
+  content: "Loading...";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #666;
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.image-row figcaption {
+  max-width: 100%;
+  margin-top: 8px;
+  text-align: center;
+}
+
+.image-row p {
+  margin-top: 8px;
+  text-align: center;
+}
+
+.image-col {
+  display: flex;
+  flex-direction: column; /* stack images vertically */
+  gap: 5px; /* space between stacked images */
+  align-items: center; /* center images horizontally within the column */
+}
+
+.big_images figure {
+  max-width: 70vw;
+}
+
+.left_image img {
+  margin-left: auto;
+}
+
+.right_image img {
+  margin-right: auto;
+}
+
+.acknowledge {
+  text-align: center;
+  font-size: 12px;
+}
+
+/* Color Correction Grid Styles */
+.color-correction-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+  gap: 30px;
+  margin: 30px 0;
+  justify-items: center;
+}
+
+/* Column headers styling - always visible */
+.column-headers {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 10px;
+  padding: 10px 0;
+  border-bottom: 2px solid #ddd;
+}
+
+.header-cell {
+  padding: 10px;
+}
+
+/* Always hide individual figcaptions */
+.image-pair figcaption {
+  display: none;
+}
+
+.image-pair {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  max-width: 100%;
+}
+
+.image-pair .image-figures {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.image-pair figure {
+  flex: 1;
+  margin: 0;
+  text-align: center;
+}
+
+.image-pair img {
+  max-width: 100%;
+  height: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.image-pair figcaption {
+  margin-top: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+}
+
+.image-metadata {
+  text-align: center;
+  font-size: 11px;
+  color: #666;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  font-family: monospace;
+}
+
+/* Matrix Display Styles */
+.matrix-container {
+  text-align: center;
+  margin: 30px 0;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.matrix-container h3 {
+  margin-bottom: 20px;
+  color: #333;
+  font-size: 24px;
+}
+
+.matrix-display {
+  display: inline-block;
+  margin: 0 auto;
+}
+
+.homography-matrix {
+  border-collapse: collapse;
+  margin: 0 auto;
+  background-color: white;
+  border: 2px solid #333;
+  border-radius: 6px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.homography-matrix td {
+  padding: 12px 16px;
+  text-align: center;
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
+  font-weight: 500;
+  border: 1px solid #ddd;
+  min-width: 80px;
+  background-color: #fff;
+}
+
+.homography-matrix tr:first-child td {
+  border-top: none;
+}
+
+.homography-matrix tr:last-child td {
+  border-bottom: none;
+}
+
+.homography-matrix td:first-child {
+  border-left: none;
+}
+
+.homography-matrix td:last-child {
+  border-right: none;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+  .color-correction-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .image-pair {
+    flex-direction: column; /* Stack metadata below images */
+    gap: 10px;
+  }
+  
+  .image-pair .image-figures {
+    flex-direction: row; /* Keep images side by side */
+    gap: 10px;
+  }
+  
+  .image-pair figure {
+    flex: 1; /* Ensure both images take equal space */
+  }
+  
+  .homography-matrix td {
+    padding: 8px 12px;
+    font-size: 14px;
+    min-width: 60px;
+  }
+}
+
+/* Mathematical Content Styles */
+.math-section {
+  background-color: #f8f9fa;
+  padding: 30px;
+  border-radius: 8px;
+  margin: 20px 0;
+  border-left: 4px solid #007bff;
+}
+
+.math-section h3 {
+  color: #2c3e50;
+  margin-top: 25px;
+  margin-bottom: 15px;
+  font-size: 20px;
+}
+
+.equation {
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: #2c3e50;
+  margin: 20px 0;
+  padding: 15px;
+  background-color: white;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  font-family: 'Times New Roman', serif;
+}
+
+.equation-block {
+  background-color: white;
+  padding: 20px;
+  border-radius: 6px;
+  border: 1px solid #dee2e6;
+  margin: 15px 0;
+  font-family: 'Times New Roman', serif;
+}
+
+.equation-block p {
+  margin: 8px 0;
+  font-size: 16px;
+}
+
+.algorithm-steps {
+  background-color: white;
+  padding: 20px;
+  border-radius: 6px;
+  border: 1px solid #dee2e6;
+  margin: 15px 0;
+}
+
+.algorithm-steps li {
+  margin: 10px 0;
+  line-height: 1.6;
+}
+
+.math-section ul {
+  background-color: white;
+  padding: 20px;
+  border-radius: 6px;
+  border: 1px solid #dee2e6;
+  margin: 15px 0;
+}
+
+.math-section ul li {
+  margin: 8px 0;
+  line-height: 1.6;
+}
+
+/* Responsive math content */
+@media (max-width: 768px) {
+  .math-section {
+    padding: 20px;
+  }
+  
+  .equation {
+    font-size: 16px;
+    padding: 12px;
+  }
+  
+  .equation-block {
+    padding: 15px;
+  }
+}
+
+/* Rectification Section Styles */
+.rectification-section {
+  margin: 40px 0;
+  padding: 20px 0;
+}
+
+.rectification-section h3 {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 25px;
+  font-size: 24px;
+  border-bottom: 2px solid #007bff;
+  padding-bottom: 10px;
+}
+
+.rectification-section h3:first-of-type {
+  color: #000000;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.rectification-section .image-row {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin: 20px 0;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 60px;
+}
+
+.correspondence-row {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 60px;
+}
+
+.correspondence-row figure {
+  max-width: 700px;
+  text-align: center;
+  margin: 0;
+}
+
+.rectification-section figure {
+  flex: 1;
+  max-width: 300px;
+  text-align: center;
+  margin: 0;
+}
+
+.football-interpolation figure {
+  flex: 1;
+  max-width: 400px;
+  text-align: center;
+  margin: 0;
+}
+
+.rectification-section img {
+  width: 100%;
+  height: auto;
+  border: 2px solid #dee2e6;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+.rectification-section img:hover {
+  transform: scale(1.02);
+}
+
+.rectification-section figcaption {
+  margin-top: 12px;
+  font-weight: bold;
+  color: #2c3e50;
+  font-size: 16px;
+  text-align: center;
+}
+
+/* Responsive design for rectification sections */
+@media (max-width: 768px) {
+  .rectification-section .image-row {
+    flex-direction: column;
+    gap: 15px;
+    padding: 0 20px;
+  }
+  
+  .correspondence-row {
+    margin: 15px 0;
+    padding: 0 20px;
+  }
+  
+  .correspondence-row figure {
+    max-width: 100%;
+  }
+  
+  .football-interpolation figure {
+    max-width: 100%;
+  }
+  
+  .rectification-section figure {
+    max-width: 100%;
+  }
+  
+  .rectification-section h3 {
+    font-size: 20px;
+  }
+}
+
+/* Mosaic Row Styles */
+.mosaic-row {
+  display: flex;
+  justify-content: center;
+  margin: 30px 0;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 60px;
+}
+
+.mosaic-row figure {
+  max-width: 100%;
+  text-align: center;
+  margin: 0;
+}
+
+.mosaic-row img {
+  width: 100%;
+  height: auto;
+  border: 2px solid #dee2e6;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Responsive design for mosaic rows */
+@media (max-width: 768px) {
+  .mosaic-row {
+    padding: 0 20px;
+    margin: 20px 0;
+  }
+}
