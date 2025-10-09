@@ -185,6 +185,18 @@
           <figcaption>Bilinear</figcaption>
         </figure>
       </div>
+      
+      <!-- Zoomed Detail Row -->
+      <div class="image-row football-interpolation">
+        <figure>
+          <img src="media/proj3/rectification/football_rectify/nearest_small.jpg" alt="Football Nearest Neighbor Zoomed">
+          <figcaption>Nearest Neighbor (Zoomed)</figcaption>
+        </figure>
+        <figure>
+          <img src="media/proj3/rectification/football_rectify/bilinear_small.jpg" alt="Football Bilinear Zoomed">
+          <figcaption>Bilinear (Zoomed)</figcaption>
+        </figure>
+      </div>
     </div>
 
     <!-- Tissue Rectification -->
@@ -214,13 +226,21 @@
       
       <p><strong>Performance:</strong> Bilinear interpolation takes longer than a nearest neighbor because the implementation requires copying shifts of the data and taking a weighted sum, but it's not excessively more expensive.</p>
       
-      <p><strong>Visual Quality:</strong> When looking closely at the football field, especially in the bottom left corner, the nearest neighbor version appears more jagged while bilinear interpolation helps to provide some smoothing, resulting in a more natural appearance.</p>
+      <p><strong>Visual Quality:</strong> When looking closely at the football field, especially the 10 yard line, the nearest neighbor version appears more jagged while bilinear interpolation helps to provide some smoothing, resulting in a more natural appearance.</p>
     </div>
   </div>
 
   <!-- Image Mosaics -->
   <div class="full-width-section">
     <h2>Image Mosaics</h2>
+
+    <!-- Window 2 Mosaic -->
+    <div class="mosaic-row">
+      <figure>
+        <img src="media/proj3/mosaics/window_2/stitched_image_1.jpg" alt="Window 2 Stitched Mosaic">
+      </figure>
+    </div>
+  </div>
     
     <!-- SOCS Mosaic -->
     <div class="mosaic-row">
@@ -235,12 +255,33 @@
         <img src="media/proj3/mosaics/old_building/stitched_image_2.jpg" alt="Old Building Stitched Mosaic">
       </figure>
     </div>
-    
-    <!-- Window 2 Mosaic -->
-    <div class="mosaic-row">
-      <figure>
-        <img src="media/proj3/mosaics/window_2/stitched_image_1.jpg" alt="Window 2 Stitched Mosaic">
-      </figure>
+  </div>
+
+  <!-- Image Stitching Process -->
+  <div class="content-container">
+    <div class="math-section">
+      <h3>Image Stitching Process</h3>
+      
+      <h4>Homography Computation and Projection</h4>
+      <p>I use the labelled correspondences to compute a homography matrix that relates the coordinate systems of the two images. Once the homography is determined, I project the corners of the image I'm warping to find what the resulting size should be for the output mosaic.</p>
+      
+      <h4>Pixel Mapping and Interpolation</h4>
+      <p>For each pixel coordinate in the output image, I use the inverse transform to find the corresponding location in the original image. This allows me to sample the appropriate pixel value using either nearest neighbor or bilinear interpolation from the source image.</p>
+      
+      <h4>Alpha Blending</h4>
+      <p>To blend the images smoothly, I added a linear alpha mask before projection. These alpha values are only used where the two projected images overlap to smooth the blending between them.</p>
+      
+      <div class="alpha-mask-example">
+        <div class="image-row">
+          <figure>
+            <img src="media/proj3/other/old_building_alpha_mask.png" alt="Old Building Alpha Mask">
+            <figcaption>Example alpha mask for mosaic blending</figcaption>
+          </figure>
+        </div>
+      </div>
+      
+      <h4>Blending Artifacts and Limitations</h4>
+      <p>In some cases, this blending approach still leaves artifacts. One failure case occurs where two image corners are in a similar place, as seen in the sky of the first mosaic. The alpha values in both sections are low, so the skies are blended evenly. However, when the first image ends, there is a sudden shift to the unblended region. This would be less apparent if the images had more overlap where the corners landed in higher alpha regions of the other images.</p>
     </div>
   </div>
 

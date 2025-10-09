@@ -458,17 +458,18 @@ figcaption {
   margin: 0;
 }
 
+
 .rectification-section img {
   width: 100%;
   height: auto;
   border: 2px solid #dee2e6;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  transition: transform 0.3s ease;
 }
 
-.rectification-section img:hover {
+.rectification-section img:not(.zoomed-detail):hover {
   transform: scale(1.02);
+  transition: transform 0.3s ease;
 }
 
 .rectification-section figcaption {
@@ -499,6 +500,7 @@ figcaption {
   .football-interpolation figure {
     max-width: 100%;
   }
+  
   
   .rectification-section figure {
     max-width: 100%;
@@ -540,4 +542,46 @@ figcaption {
     padding: 0 20px;
     margin: 20px 0;
   }
+}
+
+/* Alpha Mask Example Styles */
+.alpha-mask-example {
+  margin: 25px 0;
+  padding: 20px;
+  background-color: white;
+  border-radius: 6px;
+  border: 1px solid #dee2e6;
+}
+
+.alpha-mask-example h4 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+  font-size: 18px;
+}
+
+.alpha-mask-example .image-row {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.alpha-mask-example figure {
+  max-width: 100%;
+  text-align: center;
+  margin: 0;
+}
+
+.alpha-mask-example img {
+  max-width: 100%;
+  height: auto;
+  border: 2px solid #dee2e6;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.alpha-mask-example figcaption {
+  margin-top: 10px;
+  font-weight: bold;
+  color: #2c3e50;
+  font-size: 14px;
 }
