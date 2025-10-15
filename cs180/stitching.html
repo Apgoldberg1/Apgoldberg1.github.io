@@ -114,7 +114,6 @@
     <h2>Homography Estimation Using Least Squares</h2>
     
     <div class="math-section">
-      <h3>Problem</h3>
       <p>A homography is a 3×3 matrix <strong>H</strong> that relates corresponding points between two images through the equation:</p>
       
       <div class="equation">
@@ -266,7 +265,7 @@
       <p>I use the labelled correspondences to compute a homography matrix that relates the coordinate systems of the two images. Once the homography is determined, I project the corners of the image I'm warping to find what the resulting size should be for the output mosaic.</p>
       
       <h4>Pixel Mapping and Interpolation</h4>
-      <p>For each pixel coordinate in the output image, I use the inverse transform to find the corresponding location in the original image. This allows me to sample the appropriate pixel value using either nearest neighbor or bilinear interpolation from the source image.</p>
+      <p>For each pixel coordinate in the output image, I use the inverse transform to find the corresponding location in the original image. Then I sample the nearest neighbor or bilinear interpolation pixel value from the source image.</p>
       
       <h4>Alpha Blending</h4>
       <p>To blend the images smoothly, I added a linear alpha mask before projection. These alpha values are only used where the two projected images overlap to smooth the blending between them.</p>
@@ -281,7 +280,105 @@
       </div>
       
       <h4>Blending Artifacts and Limitations</h4>
-      <p>In some cases, this blending approach still leaves artifacts. One failure case occurs where two image corners are in a similar place, as seen in the sky of the first mosaic. The alpha values in both sections are low, so the skies are blended evenly. However, when the first image ends, there is a sudden shift to the unblended region. This would be less apparent if the images had more overlap where the corners landed in higher alpha regions of the other images.</p>
+      <p>In some cases, this blending approach still leaves artifacts. In the blending of the sky there's a clear color shift betweenn each image. If the camera settings were more consistent between the photos the sky likely wouldn't be such different colors for each one which would make the blending more seamless.</p>
+    </div>
+  </div>
+
+  <!-- Harris Corner Detection and ANMS -->
+  <div class="full-width-section">
+    <h2>Harris Corner Detection and ANMS</h2>
+    <div class="image-row">
+      <figure>
+        <img src="media/proj3/auto_feature_detection/harris_corners_all_0.jpg" alt="Harris Corners All">
+        <figcaption>Detected Corners</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj3/auto_feature_detection/harris_corners_top1k_0.jpg" alt="Harris Corners Top 1K">
+        <figcaption>Top-K (1000) Corner Strengths</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj3/auto_feature_detection/harris_corners_anms.jpg" alt="Harris Corners ANMS">
+        <figcaption>Adaptive Non-Max Suppression</figcaption>
+      </figure>
+    </div>
+  </div>
+
+     <p class="center_p">Top-k results in many detections in the tree, but misses other good correspondence points throughout the image because they are relatively weaker. ANMS helps to still keep strong detections, but spreads them out across the image.</p>
+
+  <!-- Feature Description Extraction -->
+  <div class="full-width-section">
+    <h2>Feature Description Extraction</h2>
+    <div class="image-row">
+      <figure>
+        <img src="media/proj3/auto_feature_detection/feature_descriptor_visualization.jpg" alt="Feature Descriptor Visualization">
+      </figure>
+    </div>
+    <p class="center_p">8x8 feature descriptors overlayed on image keypoints</p>
+  </div>
+
+  <!-- Feature Matching and RANSAC -->
+  <div class="full-width-section">
+    <h2>Feature Matching and RANSAC</h2>
+    
+    <!-- Correspondence Images Before and After RANSAC -->
+    <div class="image-row">
+      <figure>
+        <img src="media/proj3/auto_feature_detection/correspondences/correspondence_1.jpg" alt="Correspondence 1">
+      </figure>
+      <figure>
+        <img src="media/proj3/auto_feature_detection/correspondences/correspondence_ransac_1.jpg" alt="Correspondence RANSAC 1">
+      </figure>
+    </div>
+    
+    <div class="image-row" style="margin-top: 30px;">
+      <figure>
+        <img src="media/proj3/auto_feature_detection/correspondences/correspondence_2.jpg" alt="Correspondence 2">
+      </figure>
+      <figure>
+        <img src="media/proj3/auto_feature_detection/correspondences/correspondence_ransac_2.jpg" alt="Correspondence RANSAC 2">
+      </figure>
+    </div>
+    
+    <!-- Old Building Comparison -->
+    <div class="image-row" style="margin-top: 30px;">
+      <figure>
+        <img src="media/proj3/auto_feature_detection/correspondences/old_building_no_ransac_correspondence.jpg" alt="Old Building No RANSAC">
+        <figcaption>No RANSAC (Lowe Thresholding only)</figcaption>
+      </figure>
+      <figure>
+        <img src="media/proj3/auto_feature_detection/correspondences/old_building_ransace_correspondence.jpg" alt="Old Building RANSAC">
+        <figcaption>RANSAC</figcaption>
+      </figure>
+    </div>
+  </div>
+
+    <p class="center_p">RANSAC successfully removes outliers from correspondence pairs which greatly improves the quality of the homography matrix.</p>
+
+  <!-- Auto-Stitched Mosaics -->
+  <div class="full-width-section">
+    <h2>Auto-Stitched Mosaics</h2>
+
+    <p class="center_p">These are the mosaics that were automatically stitched using harris corner detection, feature matching, and RANSAC. The quality is actually better than my manually stitched mosaics likely because there are more correspondences and they are more accurate than my hand placed ones. Specifically, in my first mosaic of California Hall the construction scaffolding came out blurred in the manually stiched version, but it's much clear in the automatically stitched one. The other two automatically stitched mosaics look very similar to my manually stitched ones.</p>
+    
+    <!-- Old Building Auto Mosaic -->
+    <div class="mosaic-row">
+      <figure>
+        <img src="media/proj3/auto_mosaics/old_building.jpg" alt="Old Building Auto Mosaic">
+      </figure>
+    </div>
+    
+    <!-- SOCS Auto Mosaic -->
+    <div class="mosaic-row">
+      <figure>
+        <img src="media/proj3/auto_mosaics/socs.jpg" alt="SOCS Auto Mosaic">
+      </figure>
+    </div>
+    
+    <!-- Window Auto Mosaic -->
+    <div class="mosaic-row">
+      <figure>
+        <img src="media/proj3/auto_mosaics/window.jpg" alt="Window Auto Mosaic">
+      </figure>
     </div>
   </div>
 
