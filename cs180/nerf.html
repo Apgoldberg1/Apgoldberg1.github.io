@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neural Radiance Fields</title>
+  <link rel="stylesheet" href="nerf.css">
+</head>
+<body>
+
+  <div class="content-container">
+    <h1>Neural Radiance Fields</h1>
+    <p class="center_p">Andrew Goldberg</p>
+    
+    <!-- Camera Calibration Section -->
+    <h2>Camera Calibration</h2>
+    <div class="full-width-section">
+      <div class="image-row">
+        <figure>
+          <img src="media/proj4/frustum_calibration_1.png" alt="Frustum Calibration 1">
+        </figure>
+        <figure>
+          <img src="media/proj4/frustum_calibration_2.png" alt="Frustum Calibration 2">
+        </figure>
+      </div>
+      <figcaption>Visualization of camera poses solved for by calibration using aruco tag</figcaption>
+    </div>
+
+    <!-- Fitting a 2D Image Section -->
+    <h2>Fitting a 2D Image</h2>
+    <p>My network architecture uses four linear layers with ReLU activations and a sigmoid at the end. I use Adam as my optimizer with a learning rate of 1e-2 and batch size 10k training for 1000 epochs on my macbook. The hidden dimension of the linear layers is 256 (but this is changed in the width experiment).</p>
+
+    <!-- Normal Progression Images -->
+    <div class="full-width-section">
+      <div class="image-row">
+        <figure>
+          <img src="media/proj4/fox2d/normal_progression/0000.jpg" alt="Epoch 0">
+          <figcaption>1</figcaption>
+        </figure>
+        <figure>
+          <img src="media/proj4/fox2d/normal_progression/0200.jpg" alt="Epoch 200">
+          <figcaption>200</figcaption>
+        </figure>
+        <figure>
+          <img src="media/proj4/fox2d/normal_progression/0600.jpg" alt="Epoch 600">
+          <figcaption>600</figcaption>
+        </figure>
+        <figure>
+          <img src="media/proj4/fox2d/normal_progression/final_render.jpg" alt="Final Render">
+          <figcaption>1000</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <!-- Bench 2D Images -->
+    <div class="full-width-section">
+      <div class="image-row">
+        <figure>
+          <img src="media/proj4/bench_2d/L_10_0000.jpg" alt="Bench Epoch 0">
+          <figcaption>1</figcaption>
+        </figure>
+        <figure>
+          <img src="media/proj4/bench_2d/L_10_0200.jpg" alt="Bench Epoch 200">
+          <figcaption>200</figcaption>
+        </figure>
+        <figure>
+          <img src="media/proj4/bench_2d/L_10_0600.jpg" alt="Bench Epoch 600">
+          <figcaption>600</figcaption>
+        </figure>
+        <figure>
+          <img src="media/proj4/bench_2d/final_render.jpg" alt="Bench Final Render">
+          <figcaption>1000</figcaption>
+        </figure>
+      </div>
+
+      <figcaption>Training progression for the bench 2D image with L=10 and a network width of 256 at different epochs</figcaption>
+    </div>
+
+    <!-- PSNR Image -->
+    <div class="center_p">
+      <figure>
+        <img src="media/proj4/fox2d/normal_progression/psnr_fox_normal.png" alt="PSNR Training" style="max-width: 60%; height: auto;">
+        <figcaption>PSNR training on the fox image with L=10 and a network width of 256</figcaption>
+      </figure>
+    </div>
+
+    <!-- Grid Comparison -->
+    <div class="full-width-section">
+      <div class="comparison-grid">
+        <div class="grid-header-row">
+          <div class="grid-header-cell"></div>
+          <div class="grid-header-cell">Width 32</div>
+          <div class="grid-header-cell">Width 256</div>
+        </div>
+        <div class="grid-row">
+          <div class="grid-row-label">L=4</div>
+          <figure>
+            <img src="media/proj4/fox2d/grid_comp/L_4_width32_0950.jpg" alt="L=4 Width 32">
+          </figure>
+          <figure>
+            <img src="media/proj4/fox2d/grid_comp/L_4_width256_0950.jpg" alt="L=4 Width 256">
+          </figure>
+        </div>
+        <div class="grid-row">
+          <div class="grid-row-label">L=10</div>
+          <figure>
+            <img src="media/proj4/fox2d/grid_comp/L_10_width32_0950.jpg" alt="L=10 Width 32">
+          </figure>
+          <figure>
+            <img src="media/proj4/fox2d/grid_comp/L_10_width256_0950.jpg" alt="L=10 Width 256">
+          </figure>
+        </div>
+      </div>
+      <figcaption>Width is the size of the hidden dimensions in the nn and L is the number of sin cos frequency components.</figcaption>
+    </div>
+
+    <!-- Lego Bulldozer NERF Section -->
+    <h2>Lego Bulldozer NERF</h2>
+    <div class="full-width-section">
+      <div class="image-row">
+        <figure>
+          <img src="media/proj4/lego_ray_samples.png" alt="Lego Ray Samples">
+        </figure>
+        <figure>
+          <img src="media/proj4/lego_ray_samples_2.png" alt="Lego Ray Samples 2">
+        </figure>
+      </div>
+
+      <figcaption>Visualization of the ray samples for the lego NERF. Test cameras are visualized in red.</figcaption>
+    </div>
+
+    <!-- Lego Validation Images -->
+    <div class="full-width-section">
+      <div class="image-row">
+        <figure>
+          <img src="media/proj4/lego_validation/lego_val_1.png" alt="Lego Epoch 1">
+          <figcaption>1</figcaption>
+        </figure>
+        <figure>
+          <img src="media/proj4/lego_validation/lego_val_2.png" alt="Lego Epoch 2">
+          <figcaption>2</figcaption>
+        </figure>
+        <figure>
+          <img src="media/proj4/lego_validation/lego_val_5.png" alt="Lego Epoch 5">
+          <figcaption>5</figcaption>
+        </figure>
+        <figure>
+          <img src="media/proj4/lego_validation/lego_val_10.png" alt="Lego Epoch 10">
+          <figcaption>10</figcaption>
+        </figure>
+        <figure>
+          <img src="media/proj4/lego_validation/lego_val_20.png" alt="Lego Epoch 20">
+          <figcaption>20</figcaption>
+        </figure>
+      </div>
+
+      <figcaption>Validation images for the lego NERF at different epochs</figcaption>
+    </div>
+
+    <p>To create my rays I use my intrinsics matrix to get the ray direction in camera space. Then I transform it to world space with the camera to world matrix (fixing the z to be 1). I then subtract the origin from the resulting point to get the ray direction.</p>
+
+    <p>In my dataloader I precompute rays for each pixel and return a random batch of pixel values and rays. In my volume rendering I perform jittered sampling during training by adding a small random offset to the sampling points to avoid overfitting. I use 128 samples per ray for training the lego bulldozer.</p>
+
+    <p>I visualized my dataloader by rendering random rays and coloring them based on the pixel value.</p>
+
+    <p>I followed the architecture reccomended in the assignement using a width of 256 for my linear layers. I used L=10 for position frequncy encoding and L=4 for view direction frequncy encoding. I did the concatentation of the input into the middle of the network and followed the two branch approach to keep density independent of view direction. To perform volume rendering I used the volume rendering equation and implemented in using torch.cumprod and performed sampling as described above. I was able to train 20 epochs in 35 minutes on a server with a Tesla V100 GPU. I used the Addam optimizer with a learning rate of 5e-2 and a batch size of 8192.</p>
+
+    <!-- Lego PSNR Image -->
+    <div class="center_p">
+      <figure>
+        <img src="media/proj4/lego_val_psnr.png" alt="Lego PSNR Training" style="max-width: 60%; height: auto;">
+      </figure>
+    </div>
+
+    <!-- Lego NERF Rotation GIF -->
+    <div class="full-width-section">
+      <div class="center_p">
+        <figure>
+          <img src="media/proj4/nerf_gif/lego_nerf_rotation.gif" alt="Lego NERF Rotation" style="width: min(calc(100vw - 120px), 1200px); height: auto;">
+        </figure>
+      </div>
+    </div>
+
+    <!-- Duck NERF Section -->
+    <h2>Duck NERF</h2>
+    <div class="full-width-section">
+      <div class="center_p">
+        <figure>
+          <img src="media/proj4/nerf_gif/nerf_duck_rotation_final_epoch.gif" alt="Duck NERF Rotation" style="width: min(calc(100vw - 120px), 1200px); height: auto;">
+        </figure>
+      </div>
+    </div>
+
+    <p>To achieve the duck NERF, I used a batch size of 16,384, 20 epochs, and a learning rate of 5e-2 with the Adam optimizer. I trained at a resolution of 650x348 and sampled 128 points per ray for training and 256 for inference. I kept the same network architecture as the lego NERF with a width of 256 and L=10 for position and L=4 for view direction. I trained on ~30 images and held out 20% for validation.</p>
+
+    <p>To format my images for training I undistort them using cv2.undistort. Then I crop them to enforce cx and cy are centered in the image. I then resize the images and intrinsics appropriately. I used the viser camera frustum visualization to debug this logic and ensure its correctness.</p>
+
+    <!-- Custom Data Training Loss -->
+    <div class="center_p">
+      <figure>
+        <img src="media/proj4/custom_data_training_loss.png" alt="Custom Data Training Loss" style="max-width: 60%; height: auto;">
+      </figure>
+    </div>
+
+    <!-- Duck Validation Images -->
+    <div class="full-width-section">
+      <div class="image-row">
+        <figure>
+          <img src="media/proj4/duck_val/duck_val_1.png" alt="Duck Val 1">
+        </figure>
+        <figure>
+          <img src="media/proj4/duck_val/duck_val_2.png" alt="Duck Val 2">
+        </figure>
+        <figure>
+          <img src="media/proj4/duck_val/duck_val_5.png" alt="Duck Val 5">
+        </figure>
+        <figure>
+          <img src="media/proj4/duck_val/duck_val_8.png" alt="Duck Val 8">
+        </figure>
+      </div>
+      <figcaption>Validation images for the duck NERF. </figcaption>
+    </div>
+
+
+  </div>
+
+</body>
+</html>
