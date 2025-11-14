@@ -26,6 +26,8 @@
       <figcaption>Visualization of camera poses solved for by calibration using aruco tag</figcaption>
     </div>
 
+    <p>I used ~50 images of the aruco tag to calibrate my iPhone camera and obtain my camera's intrinsics matrix.</p>
+
     <!-- Fitting a 2D Image Section -->
     <h2>Fitting a 2D Image</h2>
     <p>My network architecture uses four linear layers with ReLU activations and a sigmoid at the end. I use Adam as my optimizer with a learning rate of 1e-2 and batch size 10k training for 1000 epochs on my macbook. The hidden dimension of the linear layers is 256 (but this is changed in the width experiment).</p>
