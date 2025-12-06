@@ -1,0 +1,141 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 40px auto;
+  line-height: 1.6;
+  max-width: 1400px;
+  padding: 0 20px;
+}
+
+.content-container {
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+h1 {
+  text-align: center;
+}
+
+h1.main-section {
+  font-size: 48px;
+  margin: 60px 0 40px 0;
+}
+
+h2 {
+  font-size: 30px;
+  text-align: center;
+}
+
+p {
+  text-align: center;
+}
+
+figure {
+  display: inline-block;
+  text-align: center;
+  margin: 20px 0;
+}
+
+figcaption {
+  font-style: italic;
+  font-size: 0.9em;
+  margin-top: 5px;
+}
+
+.image-row {
+  display: flex;
+  justify-content: center; /* centers all figures */
+  gap: 10px; /* space between images */
+}
+
+.image-row figure {
+  display: inline-block;
+  flex-direction: column; /* stack image and caption vertically */
+  align-items: center;    /* keep caption centered under image */
+  margin: 0;
+  min-width: 200px;
+  flex: 0 1 auto;
+}
+
+.image-row img {
+  display: block;
+  min-width: 200px;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.image-row figcaption {
+  max-width: 100%;
+  margin-top: 8px;
+  text-align: center;
+}
+
+.image-row p {
+  margin-top: 8px;
+  text-align: center;
+}
+
+.image-row:has(figure:only-child) {
+  width: 100%;
+}
+
+.image-row figure:only-child {
+  flex: 1 1 100%;
+  max-width: 100%;
+  width: 100%;
+}
+
+.image-row figure:only-child img {
+  width: 100%;
+  max-width: 100%;
+  min-width: unset;
+  height: auto;
+}
+
+.step-five-image {
+  max-width: 60% !important;
+  width: 60% !important;
+  flex: 0 1 60% !important;
+}
+
+.step-five-image img {
+  max-width: 100% !important;
+  width: 100% !important;
+  min-width: unset !important;
+  height: auto !important;
+}
+
+.campinille-square img {
+  width: 200px;
+  height: 200px;
+  object-fit: fill;
+  min-width: 200px;
+}
+
+.flip-vertical {
+  transform: scaleY(-1);
+}
+
+.image-col {
+  display: flex;
+  flex-direction: column; /* stack images vertically */
+  gap: 5px; /* space between stacked images */
+  align-items: center; /* center images horizontally within the column */
+}
+
+.big_images figure {
+  max-width: 70vw;
+}
+
+.left_image img {
+  margin-left: auto;
+}
+
+.right_image img {
+  margin-right: auto;
+}
+
+.acknowledge {
+  font-size: 12px;
+}
